@@ -1,0 +1,17 @@
+<svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background circle -->
+  <circle cx="64" cy="64" r="60" fill="#FF6D5A"/>
+  
+  <!-- Shield shape -->
+  <path d="M64 16L24 36V64C24 88 40 108 56 116L64 120L72 116C88 108 104 88 104 64V36L64 16Z" fill="#223344" opacity="0.9"/>
+  
+  <!-- Code brackets -->
+  <path d="M44 56L36 64L44 72" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M84 56L92 64L84 72" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M68 48L60 80" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- n8n logo element -->
+  <circle cx="64" cy="32" r="4" fill="white"/>
+  <circle cx="48" cy="40" r="3" fill="white" opacity="0.8"/>
+  <circle cx="80" cy="40" r="3" fill="white" opacity="0.8"/>
+</svg>

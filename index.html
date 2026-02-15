@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>n8n Automation Sidekick - AI-Powered Workflow Builder</title>
+    <meta name="description" content="Transform your automation with AI-powered n8n workflow builder. Create complex workflows in seconds, not hours. Perfect for technical and non-technical users.">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="landing.css">
+    <link rel="stylesheet" href="auth.css">
+    <link rel="stylesheet" href="workflow-builder-web.css">
+    <link rel="icon" href="icons/favicon.ico" type="image/x-icon">
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-storage-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-analytics-compat.js"></script>
+    
+    <!-- Configuration -->
+    <script src="config.js"></script>
+    <script src="nodes-config.js"></script>
+    <script src="firebase-config.js"></script>
+    <script src="auth.js"></script>
+    <script src="landing.js"></script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <div class="logo-container">
+                    <svg class="logo" width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#FF6D5A;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#FF8E53;stop-opacity:1" />
+                            </linearGradient>
+                            <filter id="glow">
+                                <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                                <feMerge>
+                                    <feMergeNode in="coloredBlur"/>
+                                    <feMergeNode in="SourceGraphic"/>
+                                </feMerge>
+                            </filter>
+                        </defs>
+                        <path d="M20 3L6 10V18C6 24.6 9.2 30.8 14 33.5L20 35L26 33.5C30.8 30.8 34 24.6 34 18V10L20 3Z" fill="url(#logoGradient)" filter="url(#glow)"/>
+                        <path d="M15 18L12 21L15 24M25 18L28 21L25 24M22 14L18 26" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span class="brand-text">n8n Sidekick</span>
+                </div>
+            </div>
+            <div class="nav-menu">
+                <a href="#features" class="nav-link">Features</a>
+                <a href="#builder" class="nav-link">Builder</a>
+                <a href="#pricing" class="nav-link">Pricing</a>
+                <a href="#docs" class="nav-link">Documentation</a>
+                
+                <!-- Auth Buttons -->
+                <div class="auth-buttons">
+                    <button class="nav-link login-btn" onclick="showLoginModal()">Sign In</button>
+                    <button class="nav-cta signup-btn" onclick="showSignupModal()">Get Started</button>
+                </div>
+                
+                <!-- User Menu (shown when logged in) -->
+                <div class="user-menu" style="display: none;">
+                    <div class="user-avatar" onclick="toggleUserDropdown()">
+                        <img src="https://picsum.photos/seed/user/32/32.jpg" alt="User" id="userAvatar">
+                    </div>
+                    <div class="user-dropdown" id="userDropdown">
+                        <div class="dropdown-header">
+                            <div class="user-name" id="userName">User</div>
+                            <div class="user-email" id="userEmail">user@example.com</div>
+                        </div>
+                        <div class="dropdown-divider"></div>
+                        <a href="#dashboard" class="dropdown-item">
+                            <i class="fas fa-tachometer-alt"></i>
+                            Dashboard
+                        </a>
+                        <a href="#workflows" class="dropdown-item">
+                            <i class="fas fa-project-diagram"></i>
+                            My Workflows
+                        </a>
+                        <a href="#settings" class="dropdown-item">
+                            <i class="fas fa-cog"></i>
+                            Settings
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <button class="dropdown-item logout-btn" onclick="handleLogout()">
+                            <i class="fas fa-sign-out-alt"></i>
+                            Sign Out
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="nav-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-bg">
+            <div class="hero-particles"></div>
+            <div class="hero-grid"></div>
+        </div>
+        <div class="hero-container">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <i class="fas fa-rocket"></i>
+                    <span>Now with Visual Workflow Builder</span>
+                </div>
+                <h1 class="hero-title">
+                    Build n8n Workflows
+                    <span class="gradient-text">10x Faster</span>
+                </h1>
+                <p class="hero-description">
+                    Transform your automation game with AI-powered workflow generation. 
+                    Describe complex logic in natural language or use our visual builder - 
+                    perfect for both technical experts and business users.
+                </p>
+                <div class="hero-actions">
+                    <button class="btn-primary btn-large">
+                        <i class="fab fa-chrome"></i>
+                        Get Chrome Extension
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                    <button class="btn-secondary btn-large">
+                        <i class="fas fa-play"></i>
+                        Watch Demo
+                    </button>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <span class="stat-number">10K+</span>
+                        <span class="stat-label">Active Users</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">50K+</span>
+                        <span class="stat-label">Workflows Created</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">4.9★</span>
+                        <span class="stat-label">User Rating</span>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="browser-mockup">
+                    <div class="browser-header">
+                        <div class="browser-dots">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                        <div class="browser-title">n8n Automation Sidekick</div>
+                        <div class="browser-actions">
+                            <i class="fas fa-minus"></i>
+                            <i class="fas fa-expand"></i>
+                            <i class="fas fa-times"></i>
+                        </div>
+                    </div>
+                    <div class="browser-content">
+                        <div class="extension-demo">
+                            <div class="demo-tabs">
+                                <div class="demo-tab active">Generate</div>
+                                <div class="demo-tab">Builder</div>
+                                <div class="demo-tab">Templates</div>
+                            </div>
+                            <div class="demo-content">
+                                <div class="demo-input">
+                                    <span>🚀</span>
+                                    <span>When a user signs up on my website...</span>
+                                </div>
+                                <div class="demo-output">
+                                    <div class="workflow-node">🪝 Webhook</div>
+                                    <div class="workflow-arrow">→</div>
+                                    <div class="workflow-node">🎯 CRM</div>
+                                    <div class="workflow-arrow">→</div>
+                                    <div class="workflow-node">📧 Email</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-badge">
+                    <i class="fas fa-star"></i>
+                    <span>Powerful Features</span>
+                </div>
+                <h2 class="section-title">Everything You Need to Automate</h2>
+                <p class="section-description">
+                    From AI-powered generation to visual building, we've got you covered
+                </p>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <div class="icon-bg ai-gradient"></div>
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3>AI-Powered Generation</h3>
+                    <p>Describe your workflow in natural language and watch AI create perfect n8n workflows with proper connections and configurations.</p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i> Natural language processing</li>
+                        <li><i class="fas fa-check"></i> Smart node connections</li>
+                        <li><i class="fas fa-check"></i> Error handling included</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <div class="icon-bg builder-gradient"></div>
+                        <i class="fas fa-project-diagram"></i>
+                    </div>
+                    <h3>Visual Workflow Builder</h3>
+                    <p>Drag-and-drop interface for non-technical users. Configure nodes with simple forms - no JSON knowledge required.</p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i> 15+ pre-configured nodes</li>
+                        <li><i class="fas fa-check"></i> Real-time validation</li>
+                        <li><i class="fas fa-check"></i> Visual connections</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <div class="icon-bg template-gradient"></div>
+                        <i class="fas fa-layer-group"></i>
+                    </div>
+                    <h3>Template Library</h3>
+                    <p>Access official n8n templates and community-contributed workflows. Start with proven patterns and customize as needed.</p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i> Official n8n templates</li>
+                        <li><i class="fas fa-check"></i> Community workflows</li>
+                        <li><i class="fas fa-check"></i> One-click import</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <div class="icon-bg multi-gradient"></div>
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <h3>Multiple AI Providers</h3>
+                    <p>Choose from OpenAI, Google Gemini, Groq, Ollama (free), or OpenRouter. Use what works best for your needs and budget.</p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i> 5+ AI providers</li>
+                        <li><i class="fas fa-check"></i> Free options available</li>
+                        <li><i class="fas fa-check"></i> Easy switching</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <div class="icon-bg context-gradient"></div>
+                        <i class="fas fa-eye"></i>
+                    </div>
+                    <h3>Context-Aware Editing</h3>
+                    <p>When working in n8n, the extension understands your current workflow and provides smart suggestions for modifications.</p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i> Canvas state reading</li>
+                        <li><i class="fas fa-check"></i> Smart suggestions</li>
+                        <li><i class="fas fa-check"></i> Seamless integration</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <div class="icon-bg security-gradient"></div>
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Secure & Private</h3>
+                    <p>Your API keys and workflow data stay on your device. We don't store or access your sensitive information.</p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i> Local storage only</li>
+                        <li><i class="fas fa-check"></i> No data tracking</li>
+                        <li><i class="fas fa-check"></i> Encrypted storage</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Workflow Builder Section -->
+    <section id="builder" class="workflow-builder-section">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-badge">
+                    <i class="fas fa-project-diagram"></i>
+                    <span>Visual Workflow Builder</span>
+                </div>
+                <h2 class="section-title">Build Workflows Visually</h2>
+                <p class="section-description">
+                    Create complex n8n workflows with our intuitive drag-and-drop interface. No coding required!
+                </p>
+            </div>
+
+            <div class="builder-container" id="webBuilderContainer">
+                <!-- Builder will be initialized here -->
+                <div class="builder-login-prompt" id="builderLoginPrompt">
+                    <div class="prompt-content">
+                        <i class="fas fa-lock"></i>
+                        <h3>Sign In to Use the Builder</h3>
+                        <p>Create an account to start building workflows visually and save them to your dashboard.</p>
+                        <button class="btn-primary" onclick="showSignupModal()">Sign Up Free</button>
+                        <button class="btn-secondary" onclick="showLoginModal()">Sign In</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section id="how-it-works" class="how-it-works">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-badge">
+                    <i class="fas fa-cogs"></i>
+                    <span>How It Works</span>
+                </div>
+                <h2 class="section-title">Get Started in 3 Simple Steps</h2>
+                <p class="section-description">
+                    From installation to your first automated workflow - it's that simple
+                </p>
+            </div>
+
+            <div class="steps-container">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <div class="step-icon">
+                            <i class="fab fa-chrome"></i>
+                        </div>
+                        <h3>Install Extension</h3>
+                        <p>Add the n8n Automation Sidekick to Chrome in seconds. No registration required.</p>
+                        <a href="#" class="step-link">
+                            Install from Chrome Store
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <div class="step-icon">
+                            <i class="fas fa-key"></i>
+                        </div>
+                        <h3>Configure AI Provider</h3>
+                        <p>Choose your preferred AI provider. Free options like Ollama or Groq are available.</p>
+                        <a href="#" class="step-link">
+                            View Setup Guide
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <div class="step-icon">
+                            <i class="fas fa-magic"></i>
+                        </div>
+                        <h3>Create Workflows</h3>
+                        <p>Describe your workflow or use the visual builder. Export to n8n with one click.</p>
+                        <a href="#" class="step-link">
+                            Try Live Demo
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="demo-section">
+                <div class="demo-container">
+                    <div class="demo-tabs">
+                        <button class="demo-tab-btn active" data-demo="ai">AI Generation</button>
+                        <button class="demo-tab-btn" data-demo="visual">Visual Builder</button>
+                        <button class="demo-tab-btn" data-demo="templates">Templates</button>
+                    </div>
+                    <div class="demo-content-area">
+                        <div class="demo-screen active" id="ai-demo">
+                            <div class="demo-input-area">
+                                <textarea placeholder="Describe your workflow...">When a user signs up on my website, add them to HubSpot CRM and send a welcome email with a discount code</textarea>
+                                <button class="demo-generate-btn">
+                                    <i class="fas fa-magic"></i>
+                                    Generate Workflow
+                                </button>
+                            </div>
+                            <div class="demo-output-area">
+                                <div class="workflow-preview">
+                                    <div class="preview-node">
+                                        <i class="fas fa-globe"></i>
+                                        <span>Webhook Trigger</span>
+                                    </div>
+                                    <div class="preview-arrow"></div>
+                                    <div class="preview-node">
+                                        <i class="fas fa-bullseye"></i>
+                                        <span>HubSpot CRM</span>
+                                    </div>
+                                    <div class="preview-arrow"></div>
+                                    <div class="preview-node">
+                                        <i class="fas fa-envelope"></i>
+                                        <span>Send Email</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-badge">
+                    <i class="fas fa-quote-left"></i>
+                    <span>User Stories</span>
+                </div>
+                <h2 class="section-title">Loved by Teams Worldwide</h2>
+                <p class="section-description">
+                    See how others are transforming their automation workflows
+                </p>
+            </div>
+
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        <div class="testimonial-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <p>"This extension has revolutionized how we build workflows. What used to take hours now takes minutes. Our marketing team can now create their own automations!"</p>
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">
+                            <img src="https://picsum.photos/seed/user1/40/40.jpg" alt="Sarah Chen">
+                        </div>
+                        <div class="author-info">
+                            <div class="author-name">Sarah Chen</div>
+                            <div class="author-title">Marketing Operations Lead</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        <div class="testimonial-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <p>"As a developer, I love the AI-generated workflows. They're well-structured and follow best practices. The visual builder is perfect for our non-technical team members."</p>
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">
+                            <img src="https://picsum.photos/seed/user2/40/40.jpg" alt="Marcus Johnson">
+                        </div>
+                        <div class="author-info">
+                            <div class="author-name">Marcus Johnson</div>
+                            <div class="author-title">Full Stack Developer</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        <div class="testimonial-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <p>"The template library alone is worth it. We've implemented dozens of workflows that would have taken weeks to build from scratch. Game changer!"</p>
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">
+                            <img src="https://picsum.photos/seed/user3/40/40.jpg" alt="Emily Rodriguez">
+                        </div>
+                        <div class="author-info">
+                            <div class="author-name">Emily Rodriguez</div>
+                            <div class="author-title">CEO, StartupHub</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing -->
+    <section id="pricing" class="pricing">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-badge">
+                    <i class="fas fa-tag"></i>
+                    <span>Pricing</span>
+                </div>
+                <h2 class="section-title">Simple, Transparent Pricing</h2>
+                <p class="section-description">
+                    Start free, upgrade when you need more power
+                </p>
+            </div>
+
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <div class="pricing-header">
+                        <h3>Free</h3>
+                        <div class="pricing-price">
+                            <span class="price-amount">$0</span>
+                            <span class="price-period">forever</span>
+                        </div>
+                        <p class="pricing-description">Perfect for individuals and small projects</p>
+                    </div>
+                    <ul class="pricing-features">
+                        <li><i class="fas fa-check"></i> AI workflow generation</li>
+                        <li><i class="fas fa-check"></i> Visual workflow builder</li>
+                        <li><i class="fas fa-check"></i> Basic templates</li>
+                        <li><i class="fas fa-check"></i> Ollama & Groq support</li>
+                        <li><i class="fas fa-check"></i> Community support</li>
+                    </ul>
+                    <button class="pricing-btn">Get Started Free</button>
+                </div>
+
+                <div class="pricing-card popular">
+                    <div class="popular-badge">
+                        <i class="fas fa-crown"></i>
+                        Most Popular
+                    </div>
+                    <div class="pricing-header">
+                        <h3>Pro</h3>
+                        <div class="pricing-price">
+                            <span class="price-amount">$19</span>
+                            <span class="price-period">/month</span>
+                        </div>
+                        <p class="pricing-description">For professionals and growing teams</p>
+                    </div>
+                    <ul class="pricing-features">
+                        <li><i class="fas fa-check"></i> Everything in Free</li>
+                        <li><i class="fas fa-check"></i> Advanced AI models</li>
+                        <li><i class="fas fa-check"></i> Premium templates</li>
+                        <li><i class="fas fa-check"></i> Context-aware editing</li>
+                        <li><i class="fas fa-check"></i> Priority support</li>
+                        <li><i class="fas fa-check"></i> Workflow analytics</li>
+                    </ul>
+                    <button class="pricing-btn primary">Start Pro Trial</button>
+                </div>
+
+                <div class="pricing-card">
+                    <div class="pricing-header">
+                        <h3>Enterprise</h3>
+                        <div class="pricing-price">
+                            <span class="price-amount">Custom</span>
+                        </div>
+                        <p class="pricing-description">For large teams and organizations</p>
+                    </div>
+                    <ul class="pricing-features">
+                        <li><i class="fas fa-check"></i> Everything in Pro</li>
+                        <li><i class="fas fa-check"></i> Custom AI models</li>
+                        <li><i class="fas fa-check"></i> Private templates</li>
+                        <li><i class="fas fa-check"></i> SSO & SAML</li>
+                        <li><i class="fas fa-check"></i> Dedicated support</li>
+                        <li><i class="fas fa-check"></i> Custom integrations</li>
+                    </ul>
+                    <button class="pricing-btn">Contact Sales</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta">
+        <div class="container">
+            <div class="cta-content">
+                <div class="cta-badge">
+                    <i class="fas fa-rocket"></i>
+                    <span>Ready to Transform Your Automation?</span>
+                </div>
+                <h2 class="cta-title">Join 10,000+ Users Building Smarter Workflows</h2>
+                <p class="cta-description">
+                    Start automating today with our free Chrome extension. No credit card required.
+                </p>
+                <div class="cta-actions">
+                    <button class="btn-primary btn-large">
+                        <i class="fab fa-chrome"></i>
+                        Install Free Extension
+                    </button>
+                    <button class="btn-secondary btn-large">
+                        <i class="fas fa-calendar"></i>
+                        Schedule Demo
+                    </button>
+                </div>
+                <div class="cta-trust">
+                    <div class="trust-item">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>Secure & Private</span>
+                    </div>
+                    <div class="trust-item">
+                        <i class="fas fa-bolt"></i>
+                        <span>Setup in 2 Minutes</span>
+                    </div>
+                    <div class="trust-item">
+                        <i class="fas fa-heart"></i>
+                        <span>Loved by Users</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="logo-container">
+                        <svg class="logo" width="32" height="32" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M20 3L6 10V18C6 24.6 9.2 30.8 14 33.5L20 35L26 33.5C30.8 30.8 34 24.6 34 18V10L20 3Z" fill="#FF6D5A"/>
+                            <path d="M15 18L12 21L15 24M25 18L28 21L25 24M22 14L18 26" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span class="brand-text">n8n Sidekick</span>
+                    </div>
+                    <p class="footer-description">
+                        AI-powered workflow automation for n8n. Build complex workflows in seconds, not hours.
+                    </p>
+                    <div class="footer-social">
+                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-github"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-discord"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>Product</h4>
+                        <a href="#features">Features</a>
+                        <a href="#pricing">Pricing</a>
+                        <a href="#templates">Templates</a>
+                        <a href="#changelog">Changelog</a>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Resources</h4>
+                        <a href="#docs">Documentation</a>
+                        <a href="#tutorials">Tutorials</a>
+                        <a href="#api">API Reference</a>
+                        <a href="#blog">Blog</a>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Company</h4>
+                        <a href="#about">About</a>
+                        <a href="#careers">Careers</a>
+                        <a href="#contact">Contact</a>
+                        <a href="#privacy">Privacy</a>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Support</h4>
+                        <a href="#help">Help Center</a>
+                        <a href="#community">Community</a>
+                        <a href="#status">Status</a>
+                        <a href="#feedback">Feedback</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <div class="footer-copyright">
+                    <p>&copy; 2024 n8n Automation Sidekick. All rights reserved.</p>
+                </div>
+                <div class="footer-legal">
+                    <a href="#terms">Terms of Service</a>
+                    <a href="#privacy">Privacy Policy</a>
+                    <a href="#cookies">Cookie Policy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Authentication Modals -->
+    <div class="auth-overlay" id="authOverlay" onclick="closeAuthModals()"></div>
+    
+    <!-- Login Modal -->
+    <div class="auth-modal" id="loginModal">
+        <div class="modal-header">
+            <h3>Welcome Back</h3>
+            <button class="modal-close" onclick="closeAuthModals()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form id="loginForm" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" id="loginEmail" required placeholder="you@example.com">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="loginPassword" required placeholder="••••••••">
+                </div>
+                <button type="submit" class="btn-primary btn-full">
+                    <i class="fas fa-sign-in-alt"></i>
+                    Sign In
+                </button>
+            </form>
+            
+            <div class="auth-divider">
+                <span>or continue with</span>
+            </div>
+            
+            <button class="btn-google btn-full" onclick="handleGoogleSignIn()">
+                <i class="fab fa-google"></i>
+                Sign in with Google
+            </button>
+            
+            <div class="auth-footer">
+                <p>Don't have an account? <a href="#" onclick="switchToSignup()">Sign up</a></p>
+                <p><a href="#" onclick="showPasswordReset()">Forgot password?</a></p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Signup Modal -->
+    <div class="auth-modal" id="signupModal">
+        <div class="modal-header">
+            <h3>Create Account</h3>
+            <button class="modal-close" onclick="closeAuthModals()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form id="signupForm" onsubmit="handleSignup(event)">
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" id="signupName" required placeholder="John Doe">
+                </div>
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" id="signupEmail" required placeholder="you@example.com">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="signupPassword" required placeholder="••••••••">
+                </div>
+                <div class="form-group">
+                    <label>Confirm Password</label>
+                    <input type="password" id="signupConfirmPassword" required placeholder="••••••••">
+                </div>
+                <button type="submit" class="btn-primary btn-full">
+                    <i class="fas fa-user-plus"></i>
+                    Create Account
+                </button>
+            </form>
+            
+            <div class="auth-divider">
+                <span>or sign up with</span>
+            </div>
+            
+            <button class="btn-google btn-full" onclick="handleGoogleSignIn()">
+                <i class="fab fa-google"></i>
+                Sign up with Google
+            </button>
+            
+            <div class="auth-footer">
+                <p>Already have an account? <a href="#" onclick="switchToLogin()">Sign in</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Notification -->
+    <div class="notification" id="notification">
+        <div class="notification-content">
+            <i class="notification-icon"></i>
+            <span class="notification-message"></span>
+        </div>
+    </div>
+
+    <!-- Demo Mode - No Firebase SDK needed -->
+    <script src="firebase-demo-config.js"></script>
+    <script src="auth.js"></script>
+    <script src="workflow-builder-web.js"></script>
+    <script src="landing.js"></script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+{
+  "manifest_version": 3,
+  "name": "n8n Automation Sidekick",
+  "version": "1.0.0",
+  "description": "Intelligent workflow automation assistant for n8n - describe complex logic in natural language and get ready-to-import workflows",
+  "permissions": [
+    "storage",
+    "clipboardWrite",
+    "activeTab",
+    "scripting"
+  ],
+  "host_permissions": [
+    "https://openrouter.ai/api/*",
+    "https://api.openai.com/*",
+    "https://generativelanguage.googleapis.com/*",
+    "https://api.groq.com/*",
+    "http://localhost:11434/*",
+    "https://*.n8n.io/*",
+    "https://*.n8n.cloud/*",
+    "https://app.n8n.cloud/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["https://*.n8n.io/*", "https://*.n8n.cloud/*", "https://app.n8n.cloud/*"],
+      "js": ["content-script.js"],
+      "run_at": "document_end"
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "n8n Automation Sidekick",
+    "default_icon": {
+      "16": "icons/icon.svg",
+      "32": "icons/icon.svg",
+      "48": "icons/icon.svg",
+      "128": "icons/icon.svg"
+    }
+  },
+  "icons": {
+    "16": "icons/icon.svg",
+    "32": "icons/icon.svg",
+    "48": "icons/icon.svg",
+    "128": "icons/icon.svg"
+  },
+  "background": {
+    "service_worker": "background.js"
+  }
+}
