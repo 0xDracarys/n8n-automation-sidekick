@@ -10,22 +10,26 @@ class SupabaseExtensionClient {
 
   async initialize() {
     try {
-      // Check if Supabase is available
+      console.log('🔧 Initializing Supabase client...');
+      
+      // Check if Supabase is available globally
       if (typeof window.supabase !== 'undefined') {
+        console.log('✅ Using global Supabase object');
         this.client = window.supabase.createClient(
-          window.ENVIRONMENT.SUPABASE.url,
-          window.ENVIRONMENT.SUPABASE.anonKey
+          window.ENVIRONMENT?.SUPABASE?.url || 'your-supabase-url',
+          window.ENVIRONMENT?.SUPABASE?.anonKey || 'your-supabase-anon-key'
         );
         this.isInitialized = true;
-        console.log('✅ Supabase client initialized for extension');
+        console.log('✅ Supabase client initialized successfully');
         return true;
       } else {
-        // Load Supabase from CDN if not available
+        console.log('⏳ Loading Supabase from CDN...');
         await this.loadSupabaseFromCDN();
         return this.initialize();
       }
     } catch (error) {
       console.error('❌ Failed to initialize Supabase client:', error);
+      this.isInitialized = false;
       return false;
     }
   }
@@ -83,10 +87,18 @@ class SupabaseExtensionClient {
   }
 
   async getCurrentUser() {
-    const client = this.getClient();
-    const { data: { user }, error } = await client.auth.getUser();
-    if (error) throw error;
-    return user;
+    try {
+      const client = this.getClient();
+      const { data: { user }, error } = await client.auth.getUser();
+      if (error) {
+        console.warn('No active session found:', error.message);
+        return null;
+      }
+      return user;
+    } catch (error) {
+      console.error('Error getting current user:', error);
+      return null;
+    }
   }
 
   async onAuthStateChange(callback) {

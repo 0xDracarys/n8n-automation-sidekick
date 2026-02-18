@@ -3,8 +3,8 @@ const router = express.Router();
 const { createClient } = require('@supabase/supabase-js');
 
 const supabase = createClient(
-  process.env.SUPABASE_URL || 'https://egabjbrvvhkutivbogjg.supabase.co',
-  process.env.SUPABASE_ANON_KEY || ''
+  process.env.SUPABASE_URL || 'your-supabase-url',
+  process.env.SUPABASE_ANON_KEY || 'your-supabase-anon-key'
 );
 
 // Signup
