@@ -1036,8 +1036,16 @@ class WebWorkflowBuilder {
     }
 
     undo() {
-        // TODO: Implement undo functionality
-        this.showStatus('Undo not implemented yet');
+        // Implement undo functionality
+        if (this.history.length > 1) {
+            this.history.pop(); // Remove current state
+            const previousState = this.history[this.history.length - 1];
+            this.workflow = JSON.parse(JSON.stringify(previousState));
+            this.render();
+            this.showStatus('Undo successful');
+        } else {
+            this.showStatus('Nothing to undo');
+        }
     }
 }
 

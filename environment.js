@@ -3,7 +3,7 @@
 
 const ENVIRONMENT = {
     // Set to 'demo' to use demo mode, or 'production' for real Supabase
-    MODE: 'production',
+    MODE: 'development', // Use development mode for local testing
     
     // Supabase Configuration
     SUPABASE: {
