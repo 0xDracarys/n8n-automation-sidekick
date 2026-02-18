@@ -6,8 +6,7 @@ const ENVIRONMENT = {
     MODE: 'development', // Use development mode for local testing
     
     // Supabase Configuration
-    SUPABASE: {
-        url: process.env.SUPABASE_URL || 'your-supabase-url',
+    SUPABASE: {        url: process.env.SUPABASE_URL || 'your-supabase-url',
         anonKey: process.env.SUPABASE_ANON_KEY || 'your-supabase-anon-key',
         publishableKey: process.env.SUPABASE_PUBLISHABLE_KEY || 'your-supabase-publishable-key'
     },
