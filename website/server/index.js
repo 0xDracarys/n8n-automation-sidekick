@@ -83,6 +83,12 @@ if (process.env.NODE_ENV === 'production') {
 const server = app.listen(PORT, HOST, (err) => {
   if (err) {
     console.error('❌ Failed to start server:', err);
+    console.error('Error details:', {
+      code: err.code,
+      syscall: err.syscall,
+      address: err.address,
+      port: err.port
+    });
     process.exit(1);
   }
 
@@ -92,6 +98,7 @@ const server = app.listen(PORT, HOST, (err) => {
   console.log(`🔗 Local access: http://localhost:${address.port}`);
   console.log(`🌍 Network access: http://${require('os').hostname()}:${address.port}`);
   console.log(`📊 Address info:`, address);
+  console.log(`🔍 Server is actually listening: ${server.listening}`);
   console.log('');
   console.log('🚀 Available endpoints:');
   console.log(`   GET  /api/health`);
@@ -102,6 +109,36 @@ const server = app.listen(PORT, HOST, (err) => {
   console.log(`   POST /api/workflow/save`);
   console.log(`   GET  /api/workflow/templates`);
   console.log('');
+
+  // Test server responsiveness immediately
+  console.log('🧪 Testing server responsiveness...');
+  const http = require('http');
+  const options = {
+    hostname: 'localhost',
+    port: address.port,
+    path: '/api/health',
+    method: 'GET',
+    timeout: 2000
+  };
+
+  const req = http.request(options, (res) => {
+    console.log(`✅ Server test successful! Status: ${res.statusCode}`);
+    res.on('data', (chunk) => {
+      console.log('📄 Health check response:', chunk.toString());
+    });
+  });
+
+  req.on('error', (err) => {
+    console.error('❌ Server test failed:', err.message);
+  });
+
+  req.on('timeout', () => {
+    console.error('❌ Server test timed out');
+    req.destroy();
+  });
+
+  req.end();
+});
 
 // Graceful shutdown handling
 process.on('SIGTERM', () => {

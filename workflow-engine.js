@@ -572,22 +572,61 @@ async function generateWorkflow({ description, provider, apiKey, model, includeE
     openrouter: 'https://openrouter.ai/api/v1/chat/completions',
     openai: 'https://api.openai.com/v1/chat/completions',
     groq: 'https://api.groq.com/openai/v1/chat/completions',
+    google: 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent'
   };
 
   const url = urls[provider];
   if (!url) throw new Error('Unsupported provider: ' + provider);
   if (!apiKey) throw new Error('API key is required');
 
-  const headers = {
-    'Authorization': 'Bearer ' + apiKey,
+  let headers = {
     'Content-Type': 'application/json'
   };
-  if (provider === 'openrouter') {
-    headers['HTTP-Referer'] = 'https://n8n-sidekick.com';
-    headers['X-Title'] = 'n8n Automation Sidekick';
-  }
 
-  const userPrompt = `Create a complete, production-ready n8n workflow for the following requirement:
+  let body;
+
+  if (provider === 'google') {
+    // Google Gemini API format
+    headers['x-goog-api-key'] = apiKey;
+    body = {
+      contents: [{
+        parts: [{
+          text: `Create a complete, production-ready n8n workflow for the following requirement:
+
+"${description}"
+
+${includeErrorHandling ? 'Include proper error handling where appropriate.' : ''}
+
+CRITICAL POSITIONING REQUIREMENTS:
+- Space nodes MINIMUM 350px apart horizontally (x-axis) to prevent overlaps
+- Start first node at x=100, y=300
+- Use consistent Y-coordinate of 300 for horizontal workflow layout
+- For branching workflows, offset Y by ±150px for parallel branches
+- Ensure sufficient space for node labels and icons
+
+VALIDATION REQUIREMENTS:
+- EVERY node referenced in connections MUST exist in the nodes array
+- No orphaned nodes - all nodes must be connected
+- Use proper node typeVersions as specified
+
+Requirements:
+- Start with the most appropriate trigger node
+- Use realistic parameter values (not placeholders)
+- Create proper connections between all nodes
+- Give each node a clear, descriptive name
+- Respond with ONLY the JSON object, nothing else`
+        }]
+      }]
+    };
+  } else {
+    // OpenAI/OpenRouter/Groq API format
+    headers['Authorization'] = 'Bearer ' + apiKey;
+    if (provider === 'openrouter') {
+      headers['HTTP-Referer'] = 'https://n8n-sidekick.com';
+      headers['X-Title'] = 'n8n Automation Sidekick';
+    }
+
+    const userPrompt = `Create a complete, production-ready n8n workflow for the following requirement:
 
 "${description}"
 
@@ -612,15 +651,16 @@ Requirements:
 - Give each node a clear, descriptive name
 - Respond with ONLY the JSON object, nothing else`;
 
-  const body = {
-    model: model || 'openai/gpt-4o-mini',
-    messages: [
-      { role: 'system', content: N8N_SYSTEM_PROMPT },
-      { role: 'user', content: userPrompt }
-    ],
-    temperature: 0.4,
-    max_tokens: 6000,
-  };
+    body = {
+      model: model || 'openai/gpt-4o-mini',
+      messages: [
+        { role: 'system', content: N8N_SYSTEM_PROMPT },
+        { role: 'user', content: userPrompt }
+      ],
+      max_tokens: 4000,
+      temperature: 0.7
+    };
+  }
 
   // Add response_format for providers that support it
   if (provider === 'openrouter' || provider === 'openai') {
@@ -639,7 +679,16 @@ Requirements:
   }
 
   const data = await res.json();
-  const content = data.choices?.[0]?.message?.content;
+  let content;
+  
+  if (provider === 'google') {
+    // Google Gemini response format
+    content = data.candidates?.[0]?.content?.parts?.[0]?.text;
+  } else {
+    // OpenAI/OpenRouter/Groq response format
+    content = data.choices?.[0]?.message?.content;
+  }
+  
   if (!content) throw new Error('No content in AI response');
 
   // Extract and validate
