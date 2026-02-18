@@ -488,55 +488,6 @@
     }
 }
 
-/* Dark Mode Support */
-@media (prefers-color-scheme: dark) {
-    .auth-modal {
-        background: var(--text-primary);
-        color: var(--bg-primary);
-    }
-    
-    .modal-header {
-        border-bottom-color: rgba(255, 255, 255, 0.1);
-    }
-    
-    .modal-close {
-        background: rgba(255, 255, 255, 0.1);
-        color: rgba(255, 255, 255, 0.7);
-    }
-    
-    .modal-close:hover {
-        background: rgba(255, 255, 255, 0.2);
-        color: white;
-    }
-    
-    .form-group input {
-        background: rgba(255, 255, 255, 0.1);
-        border-color: rgba(255, 255, 255, 0.2);
-        color: white;
-    }
-    
-    .form-group input:focus {
-        border-color: var(--primary-color);
-    }
-    
-    .btn-google {
-        background: rgba(255, 255, 255, 0.1);
-        border-color: rgba(255, 255, 255, 0.2);
-        color: white;
-    }
-    
-    .btn-google:hover {
-        background: rgba(255, 255, 255, 0.2);
-    }
-    
-    .user-dropdown {
-        background: var(--text-primary);
-        border-color: rgba(255, 255, 255, 0.2);
-    }
-    
-    .dropdown-item:hover {
-        background: rgba(255, 255, 255, 0.1);
-    }
     
     .notification {
         background: var(--text-primary);

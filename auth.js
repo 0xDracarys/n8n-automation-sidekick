@@ -144,6 +144,12 @@ function switchToLogin() {
 async function handleLogin(event) {
     event.preventDefault();
     
+    // Check if authManager is available
+    if (!window.authManager) {
+        showFormError('loginForm', 'Authentication system not ready. Please refresh the page.');
+        return;
+    }
+    
     const email = document.getElementById('loginEmail').value;
     const password = document.getElementById('loginPassword').value;
     const submitBtn = event.target.querySelector('button[type="submit"]');
@@ -174,6 +180,12 @@ async function handleLogin(event) {
 
 async function handleSignup(event) {
     event.preventDefault();
+    
+    // Check if authManager is available
+    if (!window.authManager) {
+        showFormError('signupForm', 'Authentication system not ready. Please refresh the page.');
+        return;
+    }
     
     const name = document.getElementById('signupName').value;
     const email = document.getElementById('signupEmail').value;

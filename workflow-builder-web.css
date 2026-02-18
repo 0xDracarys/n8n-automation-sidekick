@@ -550,15 +550,17 @@
     }
     
     .node-palette {
-        width: 200px;
-    }
-    
-    .properties-panel {
         width: 240px;
     }
     
-    .workflow-node {
-        min-width: 160px;
+    .properties-panel {
+        width: 100%;
+        position: fixed;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        height: 50vh;
+        border-radius: 12px 12px 0 0;
     }
 }
 
@@ -750,22 +752,4 @@
 .palette-nodes::-webkit-scrollbar-thumb:hover,
 .panel-content::-webkit-scrollbar-thumb:hover {
     background: #94a3b8;
-}
-
-/* Dark Mode Scrollbar */
-@media (prefers-color-scheme: dark) {
-    .palette-nodes::-webkit-scrollbar-track,
-    .panel-content::-webkit-scrollbar-track {
-        background: #374151;
-    }
-    
-    .palette-nodes::-webkit-scrollbar-thumb,
-    .panel-content::-webkit-scrollbar-thumb {
-        background: #4b5563;
-    }
-    
-    .palette-nodes::-webkit-scrollbar-thumb:hover,
-    .panel-content::-webkit-scrollbar-thumb:hover {
-        background: #6b7280;
-    }
 }

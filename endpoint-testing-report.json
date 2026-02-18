@@ -1,0 +1,365 @@
+{
+  "summary": {
+    "totalTests": 22,
+    "successfulTests": 1,
+    "failedTests": 21,
+    "successRate": "4.5%",
+    "timestamp": "2026-02-17T15:33:55.257Z",
+    "baseUrl": "http://localhost:3001"
+  },
+  "categories": {
+    "health": [
+      {
+        "name": "Health - Basic Check",
+        "timestamp": "2026-02-17T15:33:55.212Z",
+        "success": false,
+        "status": "ERROR",
+        "error": "",
+        "message": "Health endpoint unreachable"
+      },
+      {
+        "name": "Health - POST Method",
+        "timestamp": "2026-02-17T15:33:55.215Z",
+        "success": false,
+        "status": "ERROR",
+        "error": ""
+      },
+      {
+        "name": "Health - Invalid Path",
+        "timestamp": "2026-02-17T15:33:55.217Z",
+        "success": true,
+        "status": "404",
+        "message": "Correctly returns 404 (connection refused)"
+      }
+    ],
+    "auth": [
+      {
+        "name": "Auth - User Registration",
+        "timestamp": "2026-02-17T15:33:55.220Z",
+        "success": false,
+        "status": "ERROR",
+        "error": "",
+        "message": "Registration endpoint unreachable"
+      },
+      {
+        "name": "Auth - User Login",
+        "timestamp": "2026-02-17T15:33:55.222Z",
+        "success": false,
+        "status": "ERROR",
+        "error": "",
+        "message": "Login endpoint unreachable"
+      },
+      {
+        "name": "Auth - Invalid Login",
+        "timestamp": "2026-02-17T15:33:55.224Z",
+        "success": false,
+        "status": "ERROR",
+        "error": ""
+      },
+      {
+        "name": "Auth - Profile",
+        "timestamp": "2026-02-17T15:33:55.225Z",
+        "success": false,
+        "status": "ERROR",
+        "error": "",
+        "message": "Profile endpoint unreachable"
+      },
+      {
+        "name": "Auth - Profile Without Auth",
+        "timestamp": "2026-02-17T15:33:55.227Z",
+        "success": false,
+        "status": "ERROR",
+        "error": ""
+      },
+      {
+        "name": "Security - Auth Bypass",
+        "timestamp": "2026-02-17T15:33:55.251Z",
+        "success": false,
+        "status": "ERROR",
+        "error": ""
+      }
+    ],
+    "workflow": [
+      {
+        "name": "Workflow - Generation",
+        "timestamp": "2026-02-17T15:33:55.230Z",
+        "success": false,
+        "status": "ERROR",
+        "error": "",
+        "message": "Workflow generation endpoint unreachable"
+      },
+      {
+        "name": "Workflow - Generation Missing Data",
+        "timestamp": "2026-02-17T15:33:55.231Z",
+        "success": false,
+        "status": "ERROR",
+        "error": ""
+      },
+      {
+        "name": "Workflow - Save",
+        "timestamp": "2026-02-17T15:33:55.233Z",
+        "success": false,
+        "status": "ERROR",
+        "error": "",
+        "message": "Save workflow endpoint unreachable"
+      },
+      {
+        "name": "Workflow - Get Templates",
+        "timestamp": "2026-02-17T15:33:55.234Z",
+        "success": false,
+        "status": "ERROR",
+        "error": "",
+        "message": "Templates endpoint unreachable"
+      },
+      {
+        "name": "Workflow - Test Connection",
+        "timestamp": "2026-02-17T15:33:55.236Z",
+        "success": false,
+        "status": "ERROR",
+        "error": "",
+        "message": "Test connection endpoint unreachable"
+      }
+    ],
+    "edgeCases": [
+      {
+        "name": "Edge Case - Large Payload",
+        "timestamp": "2026-02-17T15:33:55.239Z",
+        "success": false,
+        "status": "ERROR",
+        "error": ""
+      },
+      {
+        "name": "Edge Case - Invalid JSON",
+        "timestamp": "2026-02-17T15:33:55.240Z",
+        "success": false,
+        "status": "ERROR",
+        "error": ""
+      },
+      {
+        "name": "Edge Case - SQL Injection",
+        "timestamp": "2026-02-17T15:33:55.241Z",
+        "success": false,
+        "status": "ERROR",
+        "error": ""
+      },
+      {
+        "name": "Edge Case - Rate Limiting",
+        "timestamp": "2026-02-17T15:33:55.246Z",
+        "success": false,
+        "status": "ERROR",
+        "error": ""
+      }
+    ],
+    "security": [
+      {
+        "name": "Security - CORS Headers",
+        "timestamp": "2026-02-17T15:33:55.248Z",
+        "success": false,
+        "status": "ERROR",
+        "error": ""
+      },
+      {
+        "name": "Security - Headers",
+        "timestamp": "2026-02-17T15:33:55.250Z",
+        "success": false,
+        "status": "ERROR",
+        "error": ""
+      },
+      {
+        "name": "Security - Auth Bypass",
+        "timestamp": "2026-02-17T15:33:55.251Z",
+        "success": false,
+        "status": "ERROR",
+        "error": ""
+      }
+    ],
+    "performance": [
+      {
+        "name": "Performance - Response Time",
+        "timestamp": "2026-02-17T15:33:55.254Z",
+        "success": false,
+        "status": "ERROR",
+        "error": ""
+      },
+      {
+        "name": "Performance - Concurrent Requests",
+        "timestamp": "2026-02-17T15:33:55.256Z",
+        "success": false,
+        "status": "ERROR",
+        "error": ""
+      }
+    ]
+  },
+  "detailedResults": [
+    {
+      "name": "Health - Basic Check",
+      "timestamp": "2026-02-17T15:33:55.212Z",
+      "success": false,
+      "status": "ERROR",
+      "error": "",
+      "message": "Health endpoint unreachable"
+    },
+    {
+      "name": "Health - POST Method",
+      "timestamp": "2026-02-17T15:33:55.215Z",
+      "success": false,
+      "status": "ERROR",
+      "error": ""
+    },
+    {
+      "name": "Health - Invalid Path",
+      "timestamp": "2026-02-17T15:33:55.217Z",
+      "success": true,
+      "status": "404",
+      "message": "Correctly returns 404 (connection refused)"
+    },
+    {
+      "name": "Auth - User Registration",
+      "timestamp": "2026-02-17T15:33:55.220Z",
+      "success": false,
+      "status": "ERROR",
+      "error": "",
+      "message": "Registration endpoint unreachable"
+    },
+    {
+      "name": "Auth - User Login",
+      "timestamp": "2026-02-17T15:33:55.222Z",
+      "success": false,
+      "status": "ERROR",
+      "error": "",
+      "message": "Login endpoint unreachable"
+    },
+    {
+      "name": "Auth - Invalid Login",
+      "timestamp": "2026-02-17T15:33:55.224Z",
+      "success": false,
+      "status": "ERROR",
+      "error": ""
+    },
+    {
+      "name": "Auth - Profile",
+      "timestamp": "2026-02-17T15:33:55.225Z",
+      "success": false,
+      "status": "ERROR",
+      "error": "",
+      "message": "Profile endpoint unreachable"
+    },
+    {
+      "name": "Auth - Profile Without Auth",
+      "timestamp": "2026-02-17T15:33:55.227Z",
+      "success": false,
+      "status": "ERROR",
+      "error": ""
+    },
+    {
+      "name": "Workflow - Generation",
+      "timestamp": "2026-02-17T15:33:55.230Z",
+      "success": false,
+      "status": "ERROR",
+      "error": "",
+      "message": "Workflow generation endpoint unreachable"
+    },
+    {
+      "name": "Workflow - Generation Missing Data",
+      "timestamp": "2026-02-17T15:33:55.231Z",
+      "success": false,
+      "status": "ERROR",
+      "error": ""
+    },
+    {
+      "name": "Workflow - Save",
+      "timestamp": "2026-02-17T15:33:55.233Z",
+      "success": false,
+      "status": "ERROR",
+      "error": "",
+      "message": "Save workflow endpoint unreachable"
+    },
+    {
+      "name": "Workflow - Get Templates",
+      "timestamp": "2026-02-17T15:33:55.234Z",
+      "success": false,
+      "status": "ERROR",
+      "error": "",
+      "message": "Templates endpoint unreachable"
+    },
+    {
+      "name": "Workflow - Test Connection",
+      "timestamp": "2026-02-17T15:33:55.236Z",
+      "success": false,
+      "status": "ERROR",
+      "error": "",
+      "message": "Test connection endpoint unreachable"
+    },
+    {
+      "name": "Edge Case - Large Payload",
+      "timestamp": "2026-02-17T15:33:55.239Z",
+      "success": false,
+      "status": "ERROR",
+      "error": ""
+    },
+    {
+      "name": "Edge Case - Invalid JSON",
+      "timestamp": "2026-02-17T15:33:55.240Z",
+      "success": false,
+      "status": "ERROR",
+      "error": ""
+    },
+    {
+      "name": "Edge Case - SQL Injection",
+      "timestamp": "2026-02-17T15:33:55.241Z",
+      "success": false,
+      "status": "ERROR",
+      "error": ""
+    },
+    {
+      "name": "Edge Case - Rate Limiting",
+      "timestamp": "2026-02-17T15:33:55.246Z",
+      "success": false,
+      "status": "ERROR",
+      "error": ""
+    },
+    {
+      "name": "Security - CORS Headers",
+      "timestamp": "2026-02-17T15:33:55.248Z",
+      "success": false,
+      "status": "ERROR",
+      "error": ""
+    },
+    {
+      "name": "Security - Headers",
+      "timestamp": "2026-02-17T15:33:55.250Z",
+      "success": false,
+      "status": "ERROR",
+      "error": ""
+    },
+    {
+      "name": "Security - Auth Bypass",
+      "timestamp": "2026-02-17T15:33:55.251Z",
+      "success": false,
+      "status": "ERROR",
+      "error": ""
+    },
+    {
+      "name": "Performance - Response Time",
+      "timestamp": "2026-02-17T15:33:55.254Z",
+      "success": false,
+      "status": "ERROR",
+      "error": ""
+    },
+    {
+      "name": "Performance - Concurrent Requests",
+      "timestamp": "2026-02-17T15:33:55.256Z",
+      "success": false,
+      "status": "ERROR",
+      "error": ""
+    }
+  ],
+  "recommendations": [
+    "🔧 Fix basic server connectivity - health endpoint failing",
+    "🔐 Implement proper authentication flow and token handling",
+    "⚙️ Complete workflow API implementation",
+    "🛡️ Add security headers and CORS configuration",
+    "⚡ Optimize response times and handle concurrent requests",
+    "🔍 Improve input validation and error handling"
+  ]
+}

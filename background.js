@@ -8,7 +8,7 @@ chrome.runtime.onInstalled.addListener(() => {
   chrome.storage.sync.set({
     settings: {
       apiKey: '',
-      model: 'google/gemini-2.0-flash-exp',
+      model: 'openai/gpt-4o-mini',
       temperature: '0.7'
     }
   });

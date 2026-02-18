@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>n8n Automation Sidekick</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="workflow-builder-popup.css">
 </head>
@@ -13,8 +16,9 @@
         <header class="header">
             <div class="logo">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 2L2 7V12C2 16.5 4.23 20.68 7.62 23.15L12 24L16.38 23.15C19.77 20.68 22 16.5 22 12V7L12 2Z" fill="#FF6D5A"/>
-                    <path d="M9 11L7 13L9 15M15 11L17 13L15 15M13 9L11 17" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <defs><linearGradient id="logoGrad" x1="0" y1="0" x2="24" y2="24"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#f97316"/></linearGradient></defs>
+                    <rect width="24" height="24" rx="6" fill="url(#logoGrad)"/>
+                    <path d="M7 12L10 15L17 8" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
                 <h1>n8n Sidekick</h1>
             </div>
@@ -27,7 +31,6 @@
         <!-- Tab Navigation -->
         <nav class="tab-nav">
             <button class="tab-btn active" data-tab="generate">Generate</button>
-            <button class="tab-btn" data-tab="builder">Builder</button>
             <button class="tab-btn" data-tab="templates">Templates</button>
             <button class="tab-btn" data-tab="setup">Setup</button>
         </nav>
@@ -83,53 +86,6 @@
                     <div class="error-content">
                         <h4>Generation Failed</h4>
                         <p id="errorMessage">Something went wrong. Please try again.</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Builder Tab -->
-            <div class="tab-pane" id="builder-tab">
-                <div class="builder-header">
-                    <h3>Visual Workflow Builder</h3>
-                    <div class="builder-actions">
-                        <button class="builder-btn secondary" onclick="sidekick.clearBuilder()">Clear</button>
-                        <button class="builder-btn primary" onclick="sidekick.exportBuilderWorkflow()">Export JSON</button>
-                    </div>
-                </div>
-                
-                <div class="builder-canvas" id="builderCanvas">
-                    <div class="canvas-area" id="canvasArea">
-                        <div class="canvas-placeholder" id="canvasPlaceholder">
-                            <i class="fas fa-project-diagram"></i>
-                            <p>Drag nodes here to start building</p>
-                        </div>
-                    </div>
-                    
-                    <div class="node-palette">
-                        <div class="palette-title">Nodes</div>
-                        <div class="palette-categories">
-                            <div class="category active" data-category="triggers">Triggers</div>
-                            <div class="category" data-category="actions">Actions</div>
-                            <div class="category" data-category="transforms">Transforms</div>
-                        </div>
-                        <div class="palette-nodes" id="paletteNodes">
-                            <!-- Nodes will be populated here -->
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="builder-properties" id="builderProperties">
-                    <div class="properties-header">
-                        <h4>Properties</h4>
-                        <button class="properties-close" onclick="sidekick.closeProperties()">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    </div>
-                    <div class="properties-content" id="propertiesContent">
-                        <div class="no-selection">
-                            <i class="fas fa-mouse-pointer"></i>
-                            <p>Select a node to edit</p>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -270,6 +226,57 @@
                     </div>
                 </div>
 
+                <!-- Test Suite Section -->
+                <div class="setup-section">
+                    <h3>Test Suite</h3>
+                    <div class="test-controls">
+                        <button class="test-btn primary" onclick="runQuickTest()">🧪 Quick Test</button>
+                        <button class="test-btn secondary" onclick="testConnection()">🔗 Test Connection</button>
+                        <button class="test-btn secondary" onclick="testPromptGeneration()">🧠 Test Prompt</button>
+                    </div>
+                    <div class="test-info">
+                        <p><strong>Quick Test:</strong> Tests workflow generation with current settings</p>
+                        <p><strong>Test Connection:</strong> Tests API connection to current provider</p>
+                        <p><strong>Test Prompt:</strong> Tests prompt generation with sample workflow</p>
+                    </div>
+                    <div id="testResults" class="test-results" style="display: none;">
+                        <h4>Test Results</h4>
+                        <div id="testOutput"></div>
+                    </div>
+                </div>
+
+                <div class="setup-section">
+                    <h3>Account</h3>
+                    <div class="test-info" style="margin-bottom: 10px;">
+                        <p><strong>Status:</strong> <span id="authState">Checking...</span></p>
+                    </div>
+
+                    <div id="signedOutState">
+                        <div class="form-group">
+                            <label for="authEmail">Email</label>
+                            <input type="email" id="authEmail" placeholder="you@example.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="authPassword">Password</label>
+                            <input type="password" id="authPassword" placeholder="••••••••">
+                        </div>
+                        <div class="test-controls">
+                            <button class="test-btn primary" id="authSignInBtn">Sign In</button>
+                            <button class="test-btn secondary" id="authSignUpBtn">Sign Up</button>
+                        </div>
+                    </div>
+
+                    <div id="signedInState" style="display: none;">
+                        <div class="test-info">
+                            <p>Signed in as <strong id="authUserEmail">-</strong></p>
+                        </div>
+                        <div class="test-controls">
+                            <button class="test-btn secondary" id="saveWorkflowBtn">Save Workflow</button>
+                            <button class="test-btn secondary" id="authSignOutBtn">Sign Out</button>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="setup-section">
                     <h3>About</h3>
                     <div class="about-content">
@@ -285,12 +292,24 @@
         </main>
     </div>
 
+    <script src="workflow-engine.js"></script>
+    <script src="environment.js"></script>
+    <script src="supabase-extension.js"></script>
     <script src="config.js"></script>
+    <script src="debug-system.js"></script>
+    <script src="supabase-config.js"></script>
+    <script src="test-suite.js"></script>
+    <script src="debug-extension.js"></script>
+    <script src="ultimate-fix.js"></script>
+    <script src="prompt-fix.js"></script>
+    <script src="ollama-diagnostic.js"></script>
+    <script src="api-key-test.js"></script>
+    <script src="provider-fix.js"></script>
+    <script src="generate-fix.js"></script>
     <script src="nodes-config.js"></script>
     <script src="templates.js"></script>
     <script src="template-fetcher.js"></script>
     <script src="node-configurator.js"></script>
-    <script src="workflow-builder-popup.js"></script>
     <script src="popup.js"></script>
 </body>
 </html>

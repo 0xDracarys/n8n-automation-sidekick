@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>n8n Automation Sidekick - Builder</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .builder-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .builder-header {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .builder-header h2 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .builder-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+            min-height: 600px;
+        }
+
+        .input-section {
+            padding: 40px;
+            border-right: 1px solid #e0e0e0;
+        }
+
+        .output-section {
+            padding: 40px;
+            background: #f8f9fa;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        select, input, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        select:focus, input:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .generate-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            width: 100%;
+        }
+
+        .generate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .generate-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .workflow-output {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            min-height: 400px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            white-space: pre-wrap;
+            overflow-x: auto;
+        }
+
+        .status-message {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+
+        .status-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .status-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .status-info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+
+        .copy-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 15px;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+
+        .copy-btn:hover {
+            background: #218838;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+
+        .feature-title {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .feature-description {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 768px) {
+            .builder-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .input-section {
+                border-right: none;
+                border-bottom: 1px solid #e0e0e0;
+            }
+            
+            header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🚀 n8n Automation Sidekick</h1>
+            <p>Transform your ideas into powerful n8n workflows with AI</p>
+        </header>
+
+        <div class="builder-container">
+            <div class="builder-header">
+                <h2>🔧 Workflow Builder</h2>
+                <p>Describe your workflow in natural language and watch AI create it for you</p>
+            </div>
+
+            <div class="builder-content">
+                <div class="input-section">
+                    <h3 class="section-title">📝 Workflow Description</h3>
+                    
+                    <div class="form-group">
+                        <label for="aiProvider">AI Provider</label>
+                        <select id="aiProvider">
+                            <option value="openrouter">OpenRouter (Multi-Model)</option>
+                            <option value="openai">OpenAI Direct</option>
+                            <option value="google">Google Gemini</option>
+                            <option value="groq">Groq (Free Tier)</option>
+                            <option value="ollama">Ollama (Local)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="apiKey">API Key (if required)</label>
+                        <input type="password" id="apiKey" placeholder="Enter your API key...">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="workflowDescription">Describe Your Workflow</label>
+                        <textarea id="workflowDescription" placeholder="Example: Send an email notification when a new user signs up, including their email address and signup date..."></textarea>
+                    </div>
+
+                    <button class="generate-btn" id="generateBtn">
+                        <span>🤖 Generate Workflow</span>
+                    </button>
+
+                    <div id="statusMessage"></div>
+                </div>
+
+                <div class="output-section">
+                    <h3 class="section-title">📋 Generated Workflow</h3>
+                    <div class="workflow-output" id="workflowOutput">
+                        Your generated n8n workflow will appear here...
+                    </div>
+                    <button class="copy-btn" id="copyBtn" style="display: none;">
+                        📋 Copy to Clipboard
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="features">
+            <div class="feature-card">
+                <div class="feature-icon">🧠</div>
+                <div class="feature-title">AI-Powered</div>
+                <div class="feature-description">Advanced AI models understand your requirements and generate perfect workflows</div>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <div class="feature-title">Lightning Fast</div>
+                <div class="feature-description">Generate complex workflows in seconds, not hours</div>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔄</div>
+                <div class="feature-title">Multiple Providers</div>
+                <div class="feature-description">Choose from OpenAI, Google, Groq, OpenRouter, or local Ollama</div>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">✅</div>
+                <div class="feature-title">Ready to Import</div>
+                <div class="feature-description">Generated workflows are n8n-compatible and ready to use</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="api-key-test.js"></script>
+    <script>
+        // Builder functionality
+        class WorkflowBuilder {
+            constructor() {
+                this.initializeElements();
+                this.attachEventListeners();
+                this.checkAPIKey();
+            }
+
+            initializeElements() {
+                this.generateBtn = document.getElementById('generateBtn');
+                this.copyBtn = document.getElementById('copyBtn');
+                this.workflowOutput = document.getElementById('workflowOutput');
+                this.statusMessage = document.getElementById('statusMessage');
+                this.aiProvider = document.getElementById('aiProvider');
+                this.apiKey = document.getElementById('apiKey');
+                this.workflowDescription = document.getElementById('workflowDescription');
+            }
+
+            attachEventListeners() {
+                this.generateBtn.addEventListener('click', () => this.generateWorkflow());
+                this.copyBtn.addEventListener('click', () => this.copyToClipboard());
+                this.aiProvider.addEventListener('change', () => this.handleProviderChange());
+            }
+
+            checkAPIKey() {
+                // Check if API key is configured
+                if (this.aiProvider.value === 'openrouter' && !this.apiKey.value) {
+                    console.warn('⚠️ OpenRouter API key not configured');
+                }
+            }
+
+            handleProviderChange() {
+                const provider = this.aiProvider.value;
+                const apiKeyInput = document.getElementById('apiKey');
+                
+                // Show/hide API key requirement
+                if (provider === 'ollama') {
+                    apiKeyInput.style.display = 'none';
+                    apiKeyInput.previousElementSibling.textContent = 'API Key (not required for Ollama)';
+                } else {
+                    apiKeyInput.style.display = 'block';
+                    apiKeyInput.previousElementSibling.textContent = 'API Key (required)';
+                    
+                    // Check if OpenRouter key is configured
+                    if (provider === 'openrouter' && !apiKeyInput.value) {
+                        console.warn('⚠️ OpenRouter API key not configured');
+                    }
+                }
+            }
+
+            showStatus(message, type) {
+                this.statusMessage.innerHTML = `<div class="status-message status-${type}">${message}</div>`;
+                
+                // Auto-hide after 5 seconds
+                setTimeout(() => {
+                    this.statusMessage.innerHTML = '';
+                }, 5000);
+            }
+
+            async generateWorkflow() {
+                const description = this.workflowDescription.value.trim();
+                const provider = this.aiProvider.value;
+                const apiKey = this.apiKey.value.trim();
+
+                if (!description) {
+                    this.showStatus('Please describe your workflow first!', 'error');
+                    return;
+                }
+
+                if (provider !== 'ollama' && !apiKey) {
+                    this.showStatus('API key is required for this provider!', 'error');
+                    return;
+                }
+
+                // Show loading state
+                this.generateBtn.disabled = true;
+                this.generateBtn.innerHTML = '<span>⏳ Generating...</span>';
+                this.workflowOutput.textContent = 'Generating your workflow...';
+                this.showStatus('Generating workflow with ' + provider + '...', 'info');
+
+                try {
+                    // Use the robust workflow generator
+                    const generator = window.createRobustWorkflowGenerator();
+                    
+                    const modelMap = {
+                        'openrouter': 'openai/gpt-4o-mini',
+                        'openai': 'gpt-4o-mini',
+                        'google': 'gemini-2.0-flash-exp',
+                        'groq': 'llama-3.1-70b-versatile',
+                        'ollama': 'llama3.2'
+                    };
+
+                    const result = await generator.generateWorkflow(
+                        description,
+                        provider,
+                        provider === 'ollama' ? null : apiKey,
+                        modelMap[provider]
+                    );
+
+                    if (result.success) {
+                        this.workflowOutput.textContent = JSON.stringify(result.workflow, null, 2);
+                        this.copyBtn.style.display = 'block';
+                        this.showStatus('✅ Workflow generated successfully! Ready to import into n8n.', 'success');
+                    } else {
+                        throw new Error(result.error);
+                    }
+
+                } catch (error) {
+                    this.workflowOutput.textContent = `Error: ${error.message}`;
+                    this.showStatus(`❌ Generation failed: ${error.message}`, 'error');
+                } finally {
+                    // Reset button
+                    this.generateBtn.disabled = false;
+                    this.generateBtn.innerHTML = '<span>🤖 Generate Workflow</span>';
+                }
+            }
+
+            async copyToClipboard() {
+                try {
+                    await navigator.clipboard.writeText(this.workflowOutput.textContent);
+                    this.showStatus('✅ Workflow copied to clipboard!', 'success');
+                } catch (error) {
+                    this.showStatus('❌ Failed to copy to clipboard', 'error');
+                }
+            }
+        }
+
+        // Initialize builder when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            new WorkflowBuilder();
+        });
+    </script>
+</body>
+</html>

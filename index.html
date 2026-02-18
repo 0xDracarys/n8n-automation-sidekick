@@ -20,11 +20,20 @@
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-analytics-compat.js"></script>
     
     <!-- Configuration -->
+    <script src="environment.js"></script>
     <script src="config.js"></script>
-    <script src="nodes-config.js"></script>
+    <script src="debug-system.js"></script>
+    <script src="supabase-config.js"></script>
+    <script src="auth-ui.js"></script>
     <script src="firebase-config.js"></script>
     <script src="auth.js"></script>
-    <script src="landing.js"></script>
+    <script src="workflow-builder-web.js"></script>
+    <script src="nodes-config.js"></script>
+    <script src="templates.js"></script>
+    <script src="template-fetcher.js"></script>
+    <script src="node-configurator.js"></script>
+    <script src="workflow-export.js"></script>
+    <script src="main.js"></script>
 </head>
 <body>
     <!-- Navigation -->
@@ -797,6 +806,30 @@
 
     <!-- Demo Mode - No Firebase SDK needed -->
     <script src="firebase-demo-config.js"></script>
+
+    <!-- Microservices Application Bootstrap -->
+    <script type="module">
+        // Import and initialize the microservices application
+        import app from './app.js';
+
+        // Make app globally available for debugging
+        window.app = app;
+
+        // Wait for app initialization
+        app.initialize().then(result => {
+            if (!result.success) {
+                console.error('Application failed to initialize:', result.error);
+                showNotification('Application failed to start. Please refresh the page.', 'error');
+            } else {
+                console.log('✅ n8n Sidekick application initialized successfully');
+            }
+        }).catch(error => {
+            console.error('Application initialization error:', error);
+            showNotification('Application initialization failed.', 'error');
+        });
+    </script>
+
+    <!-- Legacy auth UI (for backward compatibility during transition) -->
     <script src="auth.js"></script>
     <script src="workflow-builder-web.js"></script>
     <script src="landing.js"></script>

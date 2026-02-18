@@ -1,0 +1,22 @@
+{
+  "name": "n8n Sidekick - AI Workflow Builder",
+  "short_name": "n8n Sidekick",
+  "description": "Build production-ready n8n workflows in seconds with AI",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f0f23",
+  "theme_color": "#6366f1",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["productivity", "developer", "utilities"],
+  "lang": "en-US",
+  "dir": "ltr"
+}

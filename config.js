@@ -3,64 +3,60 @@ class Config {
     constructor() {
         this.config = {
             // API Endpoints
-            api: {
-                openrouter: process.env.OPENROUTER_API_URL || 'https://openrouter.ai/api/v1',
-                openai: process.env.OPENAI_API_URL || 'https://api.openai.com/v1',
-                google: process.env.GOOGLE_API_URL || 'https://generativelanguage.googleapis.com/v1beta',
-                groq: process.env.GROQ_API_URL || 'https://api.groq.com/openai/v1',
-                ollama: process.env.OLLAMA_API_URL || 'http://localhost:11434'
+            api: window.ENVIRONMENT?.AI_PROVIDERS || {
+                openrouter: {
+                    url: 'https://openrouter.ai/api/v1',
+                    defaultModel: 'openai/gpt-4o-mini',
+                    maxTokens: 4000,
+                    temperature: 0.7
+                },
+                openai: {
+                    url: 'https://api.openai.com/v1',
+                    defaultModel: 'gpt-4',
+                    maxTokens: 4000,
+                    temperature: 0.7
+                },
+                google: {
+                    url: 'https://generativelanguage.googleapis.com/v1beta',
+                    defaultModel: 'gemini-2.0-flash-exp',
+                    maxTokens: 4000,
+                    temperature: 0.7
+                },
+                groq: {
+                    url: 'https://api.groq.com/openai/v1',
+                    defaultModel: 'llama-3.1-70b-versatile',
+                    maxTokens: 4000,
+                    temperature: 0.7
+                },
+                ollama: {
+                    url: 'http://localhost:11434',
+                    defaultModel: 'llama3.2',
+                    maxTokens: 4000,
+                    temperature: 0.7
+                }
             },
             
             // Application Settings
-            app: {
-                name: process.env.APP_NAME || 'n8n Automation Sidekick',
-                version: process.env.APP_VERSION || '1.0.0',
-                environment: process.env.NODE_ENV || 'development',
-                debug: process.env.DEBUG === 'true'
-            },
-            
-            // AI Model Settings
-            models: {
-                openrouter: {
-                    default: process.env.OPENROUTER_DEFAULT_MODEL || 'google/gemini-2.0-flash-exp',
-                    maxTokens: parseInt(process.env.OPENROUTER_MAX_TOKENS) || 4000,
-                    temperature: parseFloat(process.env.OPENROUTER_TEMPERATURE) || 0.7
-                },
-                openai: {
-                    default: process.env.OPENAI_DEFAULT_MODEL || 'gpt-4',
-                    maxTokens: parseInt(process.env.OPENAI_MAX_TOKENS) || 4000,
-                    temperature: parseFloat(process.env.OPENAI_TEMPERATURE) || 0.7
-                },
-                google: {
-                    default: process.env.GOOGLE_DEFAULT_MODEL || 'gemini-2.0-flash-exp',
-                    maxTokens: parseInt(process.env.GOOGLE_MAX_TOKENS) || 4000,
-                    temperature: parseFloat(process.env.GOOGLE_TEMPERATURE) || 0.7
-                },
-                groq: {
-                    default: process.env.GROQ_DEFAULT_MODEL || 'llama-3.1-70b-versatile',
-                    maxTokens: parseInt(process.env.GROQ_MAX_TOKENS) || 4000,
-                    temperature: parseFloat(process.env.GROQ_TEMPERATURE) || 0.7
-                },
-                ollama: {
-                    default: process.env.OLLAMA_DEFAULT_MODEL || 'llama3.2',
-                    maxTokens: parseInt(process.env.OLLAMA_MAX_TOKENS) || 4000,
-                    temperature: parseFloat(process.env.OLLAMA_TEMPERATURE) || 0.7
-                }
+            app: window.ENVIRONMENT?.APP || {
+                name: 'n8n Automation Sidekick',
+                version: '1.0.0',
+                environment: 'development',
+                debug: true
             },
             
             // Workflow Settings
             workflow: {
-                maxNodes: parseInt(process.env.WORKFLOW_MAX_NODES) || 50,
-                maxConnections: parseInt(process.env.WORKFLOW_MAX_CONNECTIONS) || 100,
-                autoSave: process.env.WORKFLOW_AUTO_SAVE !== 'false',
-                exportFormat: process.env.WORKFLOW_EXPORT_FORMAT || 'n8n'
+                maxNodes: 50,
+                maxConnections: 100,
+                autoSave: true,
+                exportFormat: 'n8n'
             },
             
             // UI Settings
             ui: {
-                theme: process.env.UI_THEME || 'light',
-                language: process.env.UI_LANGUAGE || 'en',
-                animations: process.env.UI_ANIMATIONS !== 'false'
+                theme: 'light',
+                language: 'en',
+                animations: true
             }
         };
     }
@@ -80,11 +76,11 @@ class Config {
     }
     
     getApiUrl(provider) {
-        return this.get(`api.${provider}`);
+        return this.get(`api.${provider}.url`);
     }
     
     getModelConfig(provider) {
-        return this.get(`models.${provider}`);
+        return this.get(`api.${provider}`);
     }
     
     isDevelopment() {

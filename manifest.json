@@ -15,14 +15,16 @@
     "https://generativelanguage.googleapis.com/*",
     "https://api.groq.com/*",
     "http://localhost:11434/*",
+    "http://localhost:5678/*",
+    "http://127.0.0.1:5678/*",
     "https://*.n8n.io/*",
     "https://*.n8n.cloud/*",
     "https://app.n8n.cloud/*"
   ],
   "content_scripts": [
     {
-      "matches": ["https://*.n8n.io/*", "https://*.n8n.cloud/*", "https://app.n8n.cloud/*"],
-      "js": ["content-script.js"],
+      "matches": ["https://*.n8n.io/*", "https://*.n8n.cloud/*", "https://app.n8n.cloud/*", "http://localhost:5678/*", "http://127.0.0.1:5678/*"],
+      "js": ["content-script.js", "content-script-enhanced.js"],
       "run_at": "document_end"
     }
   ],
